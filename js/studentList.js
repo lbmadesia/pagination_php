@@ -1,7 +1,7 @@
 function studentList(){
     $.ajax({
         type: "POST",
-        url: "php/studentList.php",
+        url: "php/pagination.php",
         cache: false,
         beforeSend: function () {
             $(".studentList-tbody").html("Please wait..");
@@ -9,7 +9,19 @@ function studentList(){
         success: function (res) {
             $(".studentList-tbody").html("");
             var data = JSON.parse(res);
+           // var data = res;
+            var maxpage = Number(data.total);
             if(data.status == "success"){
+                if (maxpage == 0){
+                    $("#paginationDiv").html('');
+                }
+                else{
+                    $("#paginationDiv").html(`<div  disabled="disabled" data-number="0" data-max="` + maxpage +`" class="pag_item" id="pag_prev">Prev</div>`);
+                    for (var j = 1; j <= maxpage;++j){
+                        $("#paginationDiv").append(` <div  data-number="` + j + `" data-max="`+maxpage+`" class="pag_item">` +(j)+`</div>`);
+                    }
+                    $("#paginationDiv").append(`<div  data-number="2" data-max="` + maxpage +`" class="pag_item" id="pag_next">Next</div>`);
+                }
                 for (var i = 0; i < data.data.length; ++i) {
                     $(".studentList-tbody").append(` <tr>
                                 <td>`+(i+1)+`</td>
@@ -24,7 +36,7 @@ function studentList(){
             }else{
                  console.log(res);
             }
-          
+            pagination();
             
         },
         error: function (xhr) {

@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 require_once("database.php");
-$alldata = array();
+$alldata = array(); 
     $sql = "SELECT * FROM student";
     $res = $db->query($sql);
     if ($res->num_rows != 0) {
